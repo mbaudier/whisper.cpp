@@ -1,0 +1,4 @@
+/usr/include/whisper*.h
+
+/usr/lib/pkgconfig/*.pc
+/usr/lib/*/cmake/whisper/whisper-*.cmake

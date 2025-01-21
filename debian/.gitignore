@@ -1,0 +1,10 @@
+# dpkg-buildpackage -b -us -uc
+*.log
+*.substvars
+.debhelper
+debhelper-build-stamp
+files
+tmp/
+
+whisper-cpp*/
+libwhisper*/

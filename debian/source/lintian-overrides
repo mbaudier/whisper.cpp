@@ -1,0 +1,3 @@
+whisper-cpp source: source-is-missing [bindings/javascript/libwhisper.worker.js]
+whisper-cpp source: source-is-missing [bindings/javascript/whisper.js]
+whisper-cpp source: source-is-missing [examples/wchess/wchess.wasm/jquery-3.7.1.min.js]

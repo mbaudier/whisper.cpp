@@ -1,0 +1,40 @@
+#!/usr/bin/make -f
+# See debhelper(7) (uncomment to enable)
+#export DH_VERBOSE = 1
+
+# multiarch
+include /usr/share/dpkg/architecture.mk
+
+build_multiarch=build/$(DEB_HOST_MULTIARCH)
+install_bin=debian/tmp/usr/bin
+install_libexec_multiarch=debian/tmp/usr/libexec/$(DEB_HOST_MULTIARCH)
+
+%:
+# Use build/ for output, so that it is in the .gitignore of upstream
+	dh $@ --buildsystem=cmake --builddirectory=$(build_multiarch)
+
+override_dh_auto_configure:
+	dh_auto_configure -- \
+	-DCMAKE_LIBRARY_ARCHITECTURE="$(DEB_HOST_MULTIARCH)" \
+	-DCMAKE_PROJECT_whisper.cpp_INCLUDE=debian/cmake/debian-whisper.cpp.cmake \
+	-DCMAKE_BUILD_TYPE=Release \
+	-DBUILD_SHARED_LIBS=ON \
+	-DWHISPER_BUILD_TESTS=OFF \
+	-DWHISPER_BUILD_EXAMPLES=OFF \
+	-DWHISPER_FFMPEG=ON \
+	-DWHISPER_SDL2=ON \
+
+override_dh_auto_install:
+	dh_auto_install
+	
+	# Move executables to libexec, so that they can load the GGML backends
+	# and link them to bin
+	#mkdir -p $(install_libexec_multiarch)/ggml
+	#for file in $(install_bin)/whisper-*; do \
+    #	mv $$file $(install_libexec_multiarch)/ggml/$$(basename "$$file"); \
+	#	ln -s --relative -t $(install_bin) $(install_libexec_multiarch)/ggml/$$(basename "$$file"); \
+	#done
+
+override_dh_auto_test:
+	# tests which depends on remote location are failing
+	dh_auto_test || true

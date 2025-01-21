@@ -1,0 +1,56 @@
+Source: whisper-cpp
+Section: science
+Priority: optional
+Maintainer: Mathieu Baudier <mbaudier@argeo.org>
+Build-Depends: debhelper-compat (= 13), pkg-config, cmake-data, cmake, cpio, file, git,
+	libsdl2-dev, 
+	libswresample-dev, libavcodec-dev, libavformat-dev, libavdevice-dev, libavutil-dev, libavfilter-dev,
+	ggml-dev, libllama-dev
+Standards-Version: 4.5.1
+Homepage: https://github.com/ggerganov/whisper.cpp
+Rules-Requires-Root: binary-targets
+
+Package: libwhisper
+Priority: optional
+Architecture: any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends},
+ libggml
+Description: Inference of Whisper in pure C/C++ (shared library)
+ Whisper.cpp inference of Whisper in pure C/C++ (shared library).
+
+Package: libwhisper-dev
+Priority: optional
+Architecture: any
+Multi-Arch: same
+Depends: ${misc:Depends},
+ ggml-dev, libwhisper
+Description: Inference of Whisper in pure C/C++ (development files)
+ Whisper.cpp inference of Whisper in pure C/C++ (development files).
+
+#Package: whisper-cpp-cli
+#Architecture: any
+#Priority: optional
+#Depends: ${shlibs:Depends},
+# libwhisper,
+# libswresample4, libavcodec59, libavformat59, 
+#Description: Inference of Whisper in pure C/C++ (CLI)
+# Whisper.cpp inference of Whisper in pure C/C++ (CLI).
+
+#Package: whisper-cpp-talk-llama
+#Architecture: any
+#Priority: optional
+#Depends: ${shlibs:Depends},
+# libwhisper, libllama,
+# espeak-ng,
+# libsdl2-2.0-0, libswresample4, libavcodec59, libavformat59, 
+#Description: Inference of Whisper in pure C/C++ (talk-llama)
+# Whisper.cpp inference of Whisper in pure C/C++ (talk-llama).
+
+Package: whisper-cpp-dev
+Architecture: any
+Priority: optional
+Depends: libwhisper-dev
+Description: Inference of Whisper in pure C/C++ (common static library)
+ Whisper.cpp inference of Whisper in pure C/C++ (common static library).

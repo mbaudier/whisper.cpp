@@ -1,0 +1,2 @@
+/usr/bin/whisper-talk-llama
+debian/whisper-speak /usr/bin

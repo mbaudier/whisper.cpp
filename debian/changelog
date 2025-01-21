@@ -1,0 +1,5 @@
+whisper-cpp (1.7.4-1) unstable; urgency=medium
+
+  * Based on whisper.cpp version 1.7.4
+
+ -- Mathieu Baudier <mbaudier@argeo.org>  Tue, 21 Jan 2025 14:02:39 +0000

@@ -1,0 +1,2 @@
+#!/bin/sh
+espeak-ng -v en-gb+m$1 -s 225 -p 50 -a 200 -g 5 -k 5 -f $2
