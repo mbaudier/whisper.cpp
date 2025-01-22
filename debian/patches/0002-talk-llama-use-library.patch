@@ -1,0 +1,49 @@
+From: Mathieu Baudier <mbaudier@argeo.org>
+Date: Wed, 22 Jan 2025 09:01:06 +0100
+Subject: talk-llama-use-library
+
+Use llama.cpp library to build whisper-talk-llama.
+---
+ examples/CMakeLists.txt            |  2 +-
+ examples/talk-llama/CMakeLists.txt | 11 +++--------
+ 2 files changed, 4 insertions(+), 9 deletions(-)
+
+diff --git a/examples/CMakeLists.txt b/examples/CMakeLists.txt
+index 6435959..5d66015 100644
+--- a/examples/CMakeLists.txt
++++ b/examples/CMakeLists.txt
+@@ -110,7 +110,7 @@ else()
+     if (WHISPER_SDL2)
+         add_subdirectory(stream)
+         add_subdirectory(command)
+-        #add_subdirectory(talk-llama)
++        add_subdirectory(talk-llama)
+         #add_subdirectory(lsp)
+         if (GGML_SYCL)
+             #add_subdirectory(sycl)
+diff --git a/examples/talk-llama/CMakeLists.txt b/examples/talk-llama/CMakeLists.txt
+index ce51660..829c4f6 100644
+--- a/examples/talk-llama/CMakeLists.txt
++++ b/examples/talk-llama/CMakeLists.txt
+@@ -1,18 +1,13 @@
+ if (WHISPER_SDL2)
+     set(TARGET whisper-talk-llama)
+-    add_executable(${TARGET} talk-llama.cpp
+-        llama.cpp
+-        llama-vocab.cpp
+-        llama-grammar.cpp
+-        llama-sampling.cpp
+-        unicode.cpp
+-        unicode-data.cpp)
++    add_executable(${TARGET} talk-llama.cpp)
+     target_include_directories(${TARGET} PRIVATE ${SDL2_INCLUDE_DIRS})
+ 
+     if (WHISPER_CLBLAST)
+         set(CLBLAST_LIBNAME clblast)
+     endif ()
+-    target_link_libraries(${TARGET} PRIVATE common common-sdl whisper ${SDL2_LIBRARIES} ${CLBLAST_LIBNAME} ${CMAKE_THREAD_LIBS_INIT})
++    target_link_libraries(${TARGET} PRIVATE common common-sdl whisper llama ${SDL2_LIBRARIES} ${CLBLAST_LIBNAME} ${CMAKE_THREAD_LIBS_INIT})
++    install(TARGETS ${TARGET} RUNTIME)
+ 
+     if(WIN32)
+         # It requires Windows 8.1 or later for PrefetchVirtualMemory
