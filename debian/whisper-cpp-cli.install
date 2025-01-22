@@ -1,4 +1,2 @@
 /usr/bin/whisper-cli
 /usr/libexec/*/ggml/whisper-cli
-#/usr/bin/whisper-stream
-#/usr/bin/whisper-command

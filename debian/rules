@@ -20,7 +20,7 @@ override_dh_auto_configure:
 	-DCMAKE_BUILD_TYPE=Release \
 	-DBUILD_SHARED_LIBS=ON \
 	-DWHISPER_BUILD_TESTS=OFF \
-	-DWHISPER_BUILD_EXAMPLES=OFF \
+	-DWHISPER_BUILD_EXAMPLES=ON \
 	-DWHISPER_FFMPEG=ON \
 	-DWHISPER_SDL2=ON \
 
@@ -29,11 +29,11 @@ override_dh_auto_install:
 	
 	# Move executables to libexec, so that they can load the GGML backends
 	# and link them to bin
-	#mkdir -p $(install_libexec_multiarch)/ggml
-	#for file in $(install_bin)/whisper-*; do \
-    #	mv $$file $(install_libexec_multiarch)/ggml/$$(basename "$$file"); \
-	#	ln -s --relative -t $(install_bin) $(install_libexec_multiarch)/ggml/$$(basename "$$file"); \
-	#done
+	mkdir -p $(install_libexec_multiarch)/ggml
+	for file in $(install_bin)/whisper-*; do \
+    	mv $$file $(install_libexec_multiarch)/ggml/$$(basename "$$file"); \
+		ln -s --relative -t $(install_bin) $(install_libexec_multiarch)/ggml/$$(basename "$$file"); \
+	done
 
 override_dh_auto_test:
 	# tests which depends on remote location are failing

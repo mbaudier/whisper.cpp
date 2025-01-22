@@ -1,0 +1,36 @@
+From: Mathieu Baudier <mbaudier@argeo.org>
+Date: Wed, 22 Jan 2025 07:41:21 +0100
+Subject: filter-examples
+
+Disable building examples which are problematic or unnecessary.
+---
+ examples/CMakeLists.txt | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/examples/CMakeLists.txt b/examples/CMakeLists.txt
+index d509626..6435959 100644
+--- a/examples/CMakeLists.txt
++++ b/examples/CMakeLists.txt
+@@ -104,16 +104,16 @@ elseif(CMAKE_JS_VERSION)
+     add_subdirectory(addon.node)
+ else()
+     add_subdirectory(cli)
+-    add_subdirectory(bench)
+-    add_subdirectory(server)
+-    add_subdirectory(quantize)
++    #add_subdirectory(bench)
++    #add_subdirectory(server)
++    #add_subdirectory(quantize)
+     if (WHISPER_SDL2)
+         add_subdirectory(stream)
+         add_subdirectory(command)
+-        add_subdirectory(talk-llama)
+-        add_subdirectory(lsp)
++        #add_subdirectory(talk-llama)
++        #add_subdirectory(lsp)
+         if (GGML_SYCL)
+-            add_subdirectory(sycl)
++            #add_subdirectory(sycl)
+         endif()
+     endif (WHISPER_SDL2)
+ 

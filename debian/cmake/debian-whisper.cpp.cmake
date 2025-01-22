@@ -23,7 +23,8 @@ target_link_libraries(ggml INTERFACE ${GGML_BASE_LOCATION})
 # quite a few examples require direct reference to ggml-cpu
 #find_library(GGML_CPU_LOCATION ggml-cpu-sandybridge)
 #message (STATUS "Found GGML CPU library: ${GGML_CPU_LOCATION}")
-#link_libraries("/usr/libexec/${CMAKE_LIBRARY_ARCHITECTURE}/ggml/libggml-cpu-sandybridge.so")
+link_libraries("${CMAKE_INSTALL_PREFIX}/libexec/${CMAKE_LIBRARY_ARCHITECTURE}/ggml/libggml-cpu-sandybridge.so")
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/libexec/${CMAKE_LIBRARY_ARCHITECTURE}/ggml")
 endif()
 
 add_compile_definitions(NDEBUG)
