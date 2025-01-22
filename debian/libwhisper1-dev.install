@@ -1,6 +1,7 @@
 /usr/include/whisper*.h
+# unversioned symbolic link
+/usr/lib/*/libwhisper.so
 
 /usr/lib/*/pkgconfig/whisper.pc
 
-/usr/lib/*/libwhisper.so
 /usr/lib/*/cmake/whisper/whisper-*.cmake

@@ -10,7 +10,7 @@ Standards-Version: 4.5.1
 Homepage: https://github.com/ggerganov/whisper.cpp
 Rules-Requires-Root: binary-targets
 
-Package: libwhisper
+Package: libwhisper1
 Priority: optional
 Architecture: any
 Multi-Arch: same
@@ -20,20 +20,11 @@ Depends: ${misc:Depends}, ${shlibs:Depends},
 Description: Inference of Whisper in pure C/C++ (shared library)
  Whisper.cpp inference of Whisper in pure C/C++ (shared library).
 
-Package: libwhisper-dev
-Priority: optional
-Architecture: any
-Multi-Arch: same
-Depends: ${misc:Depends},
- ggml-dev, libwhisper
-Description: Inference of Whisper in pure C/C++ (development files)
- Whisper.cpp inference of Whisper in pure C/C++ (development files).
-
 Package: whisper-cpp-cli
 Architecture: any
 Priority: optional
 Depends: ${misc:Depends}, ${shlibs:Depends},
- libwhisper,
+ libwhisper1,
  libswresample4, libavcodec59, libavformat59
 Description: Inference of Whisper in pure C/C++ (CLI)
  Whisper.cpp inference of Whisper in pure C/C++ (CLI).
@@ -42,7 +33,7 @@ Package: whisper-cpp-stream
 Architecture: any
 Priority: optional
 Depends: ${misc:Depends}, ${shlibs:Depends},
- libwhisper,
+ libwhisper1,
  libswresample4, libavcodec59, libavformat59,
  libsdl2-2.0-0
 Description: Inference of Whisper in pure C/C++ (stream)
@@ -52,17 +43,26 @@ Package: whisper-cpp-talk-llama
 Architecture: any
 Priority: optional
 Depends: ${misc:Depends}, ${shlibs:Depends},
- libwhisper, libllama,
+ libwhisper1, libllama,
  espeak-ng,
  libswresample4, libavcodec59, libavformat59,
  libsdl2-2.0-0
 Description: Inference of Whisper in pure C/C++ (talk-llama)
  Whisper.cpp inference of Whisper in pure C/C++ (talk-llama).
 
+Package: libwhisper1-dev
+Priority: optional
+Architecture: any
+Multi-Arch: same
+Depends: ${misc:Depends},
+ ggml-dev, libwhisper1 (= ${binary:Version})
+Description: Inference of Whisper in pure C/C++ (development files)
+ Whisper.cpp inference of Whisper in pure C/C++ (development files).
+
 Package: whisper-cpp-dev
 Architecture: any
 Priority: optional
 Depends: ${misc:Depends},
- libwhisper-dev
+ libwhisper1-dev (= ${binary:Version})
 Description: Inference of Whisper in pure C/C++ (common static library)
  Whisper.cpp inference of Whisper in pure C/C++ (common static library).
