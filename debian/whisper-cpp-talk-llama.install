@@ -1,2 +1,5 @@
 /usr/bin/whisper-talk-llama
+/usr/libexec/*/ggml/whisper-talk-llama
+
+# wrapper to espeak to use for talk output
 debian/whisper-speak /usr/bin

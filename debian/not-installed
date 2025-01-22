@@ -1,2 +1,2 @@
-/usr/bin/whisper-*
-/usr/libexec/*/ggml/whisper-*
+/usr/bin/whisper-command
+/usr/libexec/*/ggml/whisper-command
