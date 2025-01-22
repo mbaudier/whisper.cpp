@@ -23,7 +23,7 @@ override_dh_auto_configure:
 	-DBUILD_SHARED_LIBS=ON \
 	-DWHISPER_BUILD_TESTS=OFF \
 	-DWHISPER_BUILD_EXAMPLES=ON \
-	-DWHISPER_FFMPEG=ON \
+	-DWHISPER_FFMPEG=OFF \
 	-DWHISPER_SDL2=ON \
 
 override_dh_auto_install:
