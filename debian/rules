@@ -7,6 +7,8 @@ include /usr/share/dpkg/architecture.mk
 
 build_multiarch=build/$(DEB_HOST_MULTIARCH)
 install_bin=debian/tmp/usr/bin
+install_lib=debian/tmp/usr/lib
+install_lib_multiarch=debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)
 install_libexec_multiarch=debian/tmp/usr/libexec/$(DEB_HOST_MULTIARCH)
 
 %:
@@ -34,6 +36,10 @@ override_dh_auto_install:
     	mv $$file $(install_libexec_multiarch)/ggml/$$(basename "$$file"); \
 		ln -s --relative -t $(install_bin) $(install_libexec_multiarch)/ggml/$$(basename "$$file"); \
 	done
+	
+	# Multiarch pkgconfig
+	mkdir -p $(install_lib_multiarch)/pkgconfig
+	mv $(install_lib)/pkgconfig/*.pc $(install_lib_multiarch)/pkgconfig
 
 override_dh_auto_test:
 	# tests which depends on remote location are failing
