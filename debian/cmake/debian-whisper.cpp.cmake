@@ -24,7 +24,11 @@ target_link_libraries(ggml INTERFACE ${GGML_BASE_LOCATION})
 #find_library(GGML_CPU_LOCATION ggml-cpu-sandybridge)
 #message (STATUS "Found GGML CPU library: ${GGML_CPU_LOCATION}")
 link_libraries("${CMAKE_INSTALL_PREFIX}/libexec/${CMAKE_LIBRARY_ARCHITECTURE}/ggml/libggml-cpu-sandybridge.so")
-set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/libexec/${CMAKE_LIBRARY_ARCHITECTURE}/ggml")
+
+# FIXME Not clear whether a libggml-cpu is actually needed.
+# LD_LIBRARY_PATH=/usr/libexec/*/ggml would have to be used in that case
+# It could be more robust to set RPATH, but it causes lintian errors:
+#set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/libexec/${CMAKE_LIBRARY_ARCHITECTURE}/ggml")
 endif()
 
 add_compile_definitions(NDEBUG)
