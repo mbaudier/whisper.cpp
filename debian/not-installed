@@ -1,2 +1,5 @@
 /usr/bin/whisper-command
 /usr/libexec/*/ggml/whisper-command
+
+/usr/bin/whisper-talk-llama
+/usr/libexec/*/ggml/whisper-talk-llama
