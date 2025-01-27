@@ -1,4 +1,4 @@
-whisper-cpp (1.7.4-1) unstable; urgency=medium
+whisper-cpp (1.7.4+20240114.99b011a-1) unstable; urgency=medium
 
   * Based on whisper.cpp version 1.7.4
 
