@@ -36,16 +36,16 @@ Depends: ${misc:Depends}, ${shlibs:Depends},
 Description: Inference of Whisper in pure C/C++ (stream)
  Whisper.cpp inference of Whisper in pure C/C++ (stream).
 
-#Package: whisper-cpp-talk-llama
-#Architecture: any
-#Priority: optional
-#Depends: ${misc:Depends}, ${shlibs:Depends},
-# libwhisper1, libllama,
-# espeak-ng,
-# libswresample4, libavcodec59, libavformat59,
-# libsdl2-2.0-0
-#Description: Inference of Whisper in pure C/C++ (talk-llama)
-# Whisper.cpp inference of Whisper in pure C/C++ (talk-llama).
+Package: whisper-cpp-talk-llama
+Architecture: any
+Priority: optional
+Depends: ${misc:Depends}, ${shlibs:Depends},
+ libwhisper1, libllama,
+ espeak-ng,
+ libswresample4, libavcodec59, libavformat59,
+ libsdl2-2.0-0
+Description: Inference of Whisper in pure C/C++ (talk-llama)
+ Whisper.cpp inference of Whisper in pure C/C++ (talk-llama).
 
 Package: libwhisper1-dev
 Priority: optional
