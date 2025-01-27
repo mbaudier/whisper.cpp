@@ -1,0 +1,25 @@
+From: Mathieu Baudier <mbaudier@argeo.org>
+Date: Mon, 27 Jan 2025 09:34:50 +0100
+Subject: load-ggml-backends
+
+Make sure GGML backends are loaded in talk-llama
+---
+ examples/talk-llama/talk-llama.cpp | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/examples/talk-llama/talk-llama.cpp b/examples/talk-llama/talk-llama.cpp
+index dcdaec4..43bd58b 100644
+--- a/examples/talk-llama/talk-llama.cpp
++++ b/examples/talk-llama/talk-llama.cpp
+@@ -272,7 +272,10 @@ The transcript only includes text, it does not include markup like HTML and Mark
+ {0}{4})";
+ 
+ int main(int argc, char ** argv) {
+-    whisper_params params;
++	// make sure GGML backends are loaded
++	ggml_backend_load_all();
++
++	whisper_params params;
+ 
+     if (whisper_params_parse(argc, argv, params) == false) {
+         return 1;

@@ -1,2 +1,3 @@
 0001-disable-some-examples.patch
 0002-use-llama-cpp-library.patch
+0003-load-ggml-backends.patch
