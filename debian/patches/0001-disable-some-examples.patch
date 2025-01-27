@@ -1,14 +1,14 @@
 From: Mathieu Baudier <mbaudier@argeo.org>
-Date: Wed, 22 Jan 2025 07:41:21 +0100
-Subject: filter-examples
+Date: Mon, 27 Jan 2025 08:08:56 +0100
+Subject: disable-some-examples
 
-Disable building examples which are problematic or unnecessary.
+Disable some unused examples
 ---
  examples/CMakeLists.txt | 12 ++++++------
  1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/examples/CMakeLists.txt b/examples/CMakeLists.txt
-index d509626..6435959 100644
+index d509626..6d0ba25 100644
 --- a/examples/CMakeLists.txt
 +++ b/examples/CMakeLists.txt
 @@ -104,16 +104,16 @@ elseif(CMAKE_JS_VERSION)
@@ -24,9 +24,8 @@ index d509626..6435959 100644
      if (WHISPER_SDL2)
          add_subdirectory(stream)
          add_subdirectory(command)
--        add_subdirectory(talk-llama)
+         add_subdirectory(talk-llama)
 -        add_subdirectory(lsp)
-+        #add_subdirectory(talk-llama)
 +        #add_subdirectory(lsp)
          if (GGML_SYCL)
 -            add_subdirectory(sycl)
@@ -34,3 +33,10 @@ index d509626..6435959 100644
          endif()
      endif (WHISPER_SDL2)
  
+@@ -121,5 +121,5 @@ else()
+ endif()
+ 
+ if (WHISPER_SDL2)
+-    add_subdirectory(wchess)
++    #add_subdirectory(wchess)
+ endif (WHISPER_SDL2)

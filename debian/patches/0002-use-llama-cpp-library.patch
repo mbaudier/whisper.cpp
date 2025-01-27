@@ -1,38 +1,38 @@
 From: Mathieu Baudier <mbaudier@argeo.org>
-Date: Wed, 22 Jan 2025 09:01:06 +0100
-Subject: talk-llama-use-library
+Date: Mon, 27 Jan 2025 08:09:55 +0100
+Subject: use-llama-cpp-library
 
-Use llama.cpp library to build whisper-talk-llama.
+Use llma.cpp shared library to build talk-llama
 ---
- examples/CMakeLists.txt            |  2 +-
- examples/talk-llama/CMakeLists.txt | 11 +++--------
- 2 files changed, 4 insertions(+), 9 deletions(-)
+ examples/talk-llama/CMakeLists.txt | 24 +++---------------------
+ 1 file changed, 3 insertions(+), 21 deletions(-)
 
-diff --git a/examples/CMakeLists.txt b/examples/CMakeLists.txt
-index 6435959..5d66015 100644
---- a/examples/CMakeLists.txt
-+++ b/examples/CMakeLists.txt
-@@ -110,7 +110,7 @@ else()
-     if (WHISPER_SDL2)
-         add_subdirectory(stream)
-         add_subdirectory(command)
--        #add_subdirectory(talk-llama)
-+        add_subdirectory(talk-llama)
-         #add_subdirectory(lsp)
-         if (GGML_SYCL)
-             #add_subdirectory(sycl)
 diff --git a/examples/talk-llama/CMakeLists.txt b/examples/talk-llama/CMakeLists.txt
-index ce51660..829c4f6 100644
+index c15c6b5..c975d42 100644
 --- a/examples/talk-llama/CMakeLists.txt
 +++ b/examples/talk-llama/CMakeLists.txt
-@@ -1,18 +1,13 @@
- if (WHISPER_SDL2)
+@@ -3,32 +3,14 @@ if (WHISPER_SDL2)
+     set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ 
      set(TARGET whisper-talk-llama)
 -    add_executable(${TARGET} talk-llama.cpp
 -        llama.cpp
--        llama-vocab.cpp
+-        llama-adapter.cpp
+-        llama-arch.cpp
+-        llama-batch.cpp
+-        llama-chat.cpp
+-        llama-context.cpp
+-        llama-cparams.cpp
 -        llama-grammar.cpp
+-        llama-hparams.cpp
+-        llama-impl.cpp
+-        llama-kv-cache.cpp
+-        llama-mmap.cpp
+-        llama-model-loader.cpp
+-        llama-model.cpp
+-        llama-quant.cpp
 -        llama-sampling.cpp
+-        llama-vocab.cpp
 -        unicode.cpp
 -        unicode-data.cpp)
 +    add_executable(${TARGET} talk-llama.cpp)
