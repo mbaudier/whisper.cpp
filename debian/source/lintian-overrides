@@ -1,3 +1,15 @@
+# some of the "examples" are actually source code form this packaging perspective
+whisper-cpp source: package-does-not-install-examples [bindings/go/examples/]
+whisper-cpp source: package-does-not-install-examples [examples/]
+
+# unused source code
 whisper-cpp source: source-is-missing [bindings/javascript/libwhisper.worker.js]
 whisper-cpp source: source-is-missing [bindings/javascript/whisper.js]
 whisper-cpp source: source-is-missing [examples/wchess/wchess.wasm/jquery-3.7.1.min.js]
+whisper-cpp source: source-contains-prebuilt-java-object [bindings/java/gradle/wrapper/gradle-wrapper.jar]
+whisper-cpp source: source-contains-prebuilt-java-object [examples/whisper.android.java/gradle/wrapper/gradle-wrapper.jar]
+whisper-cpp source: source-contains-prebuilt-java-object [examples/whisper.android/gradle/wrapper/gradle-wrapper.jar]
+whisper-cpp source: source-contains-prebuilt-javascript-object [bindings/javascript/libwhisper.worker.js]
+whisper-cpp source: source-contains-prebuilt-javascript-object [bindings/javascript/whisper.js]
+whisper-cpp source: source-contains-prebuilt-javascript-object [examples/wchess/wchess.wasm/chessboardjs-1.0.0/js/chessboard-1.0.0.min.js]
+whisper-cpp source: source-contains-prebuilt-javascript-object [examples/wchess/wchess.wasm/jquery-3.7.1.min.js]

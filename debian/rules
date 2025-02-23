@@ -11,6 +11,12 @@ install_lib=debian/tmp/usr/lib
 install_lib_multiarch=debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)
 install_libexec_multiarch=debian/tmp/usr/libexec/$(DEB_HOST_MULTIARCH)
 
+# parallelism
+DEB_BUILD_OPTIONS ?= parallel=8
+
+# hardening
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
 %:
 # Use build/ for output, so that it is in the .gitignore of upstream
 	dh $@ --buildsystem=cmake --builddirectory=$(build_multiarch)

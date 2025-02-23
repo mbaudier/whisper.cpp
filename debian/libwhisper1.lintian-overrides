@@ -1,0 +1,3 @@
+# According to https://wiki.debian.org/UsingSymbolsFiles
+# "For C++ libraries it is often better not to ship symbols files."
+libwhisper1: no-symbols-control-file usr/lib/x86_64-linux-gnu/libwhisper.so.*

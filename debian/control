@@ -2,64 +2,75 @@ Source: whisper-cpp
 Section: science
 Priority: optional
 Maintainer: Mathieu Baudier <mbaudier@argeo.org>
-Build-Depends: debhelper-compat (= 13), pkg-config, cmake-data, cmake, cpio, file, git,
-	libsdl2-dev, 
-	ggml-dev, libggml-cpu, libllama-dev
-Standards-Version: 4.5.1
+Build-Depends: debhelper-compat (= 13), pkgconf,
+	cmake-data, cmake,
+	libsdl2-dev,
+	ggml-dev, libggml-cpu,
+	libllama0-dev,
+Standards-Version: 4.7.0
+Vcs-Git: https://git.djapps.eu/pkg/ggml/sources/whisper.cpp
+Vcs-Browser: https://git.djapps.eu/?p=pkg/ggml/sources/whisper.cpp;a=summary
 Homepage: https://github.com/ggerganov/whisper.cpp
 Rules-Requires-Root: binary-targets
 
 Package: libwhisper1
-Priority: optional
+Section: libs
 Architecture: any
 Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends}, ${shlibs:Depends},
- libggml, libggml-cpu
+ libggml0, libggml-cpu
 Description: Inference of Whisper in pure C/C++ (shared library)
- Whisper.cpp inference of Whisper in pure C/C++ (shared library).
+ The shared library provides the core of whisper.cpp
+ speech-to-text capabilities using a Whisper model.
 
 Package: whisper-cpp-cli
 Architecture: any
-Priority: optional
 Depends: ${misc:Depends}, ${shlibs:Depends},
  libwhisper1
 Description: Inference of Whisper in pure C/C++ (CLI)
- Whisper.cpp inference of Whisper in pure C/C++ (CLI).
+ A versatile tool giving command line access to most
+ whisper-cpp capabilities.
 
 Package: whisper-cpp-stream
 Architecture: any
-Priority: optional
 Depends: ${misc:Depends}, ${shlibs:Depends},
  libwhisper1,
  libsdl2-2.0-0
 Description: Inference of Whisper in pure C/C++ (stream)
- Whisper.cpp inference of Whisper in pure C/C++ (stream).
+ Real-time speech-to-text of SDL sound input.
+ The SDL sound input (typically a microphone) is
+ transcribed as text to the standard output.
 
 Package: whisper-cpp-talk-llama
 Architecture: any
-Priority: optional
 Depends: ${misc:Depends}, ${shlibs:Depends},
- libwhisper1, libllama,
+ libwhisper1, libllama0,
  espeak-ng,
  libswresample4, libavcodec59, libavformat59,
  libsdl2-2.0-0
 Description: Inference of Whisper in pure C/C++ (talk-llama)
- Whisper.cpp inference of Whisper in pure C/C++ (talk-llama).
+ A tool allowing one to "talk" with a large language model,
+ using llama.cpp.
+ The SDL input (typically from a microphone) is translated
+ into text by whisper.cpp and sent to llama.cpp for processing.
 
 Package: libwhisper1-dev
-Priority: optional
+Section: libdevel
 Architecture: any
 Multi-Arch: same
 Depends: ${misc:Depends},
  ggml-dev, libwhisper1 (= ${binary:Version})
 Description: Inference of Whisper in pure C/C++ (development files)
- Whisper.cpp inference of Whisper in pure C/C++ (development files).
+ Development files for using whisper.cpp as a shared library
+ in applications.
 
 Package: whisper-cpp-dev
+Section: libdevel
 Architecture: any
-Priority: optional
 Depends: ${misc:Depends},
  libwhisper1-dev (= ${binary:Version})
 Description: Inference of Whisper in pure C/C++ (common static library)
- Whisper.cpp inference of Whisper in pure C/C++ (common static library).
+ Development files and static libraries of the used to build the tools.
+ These components speeds up the development but are likely to have less
+ stable APIs.

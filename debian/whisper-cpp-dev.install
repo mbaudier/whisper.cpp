@@ -1,2 +1,3 @@
-/usr/include/whisper.cpp/common
-/usr/lib/*/whisper.cpp/*
+/usr/include/whisper.cpp/common/*.h
+/usr/lib/*/whisper.cpp/common/libcommon.a
+/usr/lib/*/whisper.cpp/common/libcommon-sdl.a

@@ -21,7 +21,9 @@ set_target_properties(ggml PROPERTIES IMPORTED_LOCATION ${GGML_LOCATION})
 target_link_libraries(ggml INTERFACE ${GGML_BASE_LOCATION})
 
 # libwhisper actually link against a CPU backend
-find_library(GGML_CPU_LOCATION ggml-cpu)
+#find_library(GGML_CPU_LOCATION ggml-cpu)
+# FIXME better way to find CPU backend
+set(GGML_CPU_LOCATION /usr/libexec/${CMAKE_LIBRARY_ARCHITECTURE}/ggml/libggml-cpu-sandybridge.so)
 message (STATUS "Found GGML CPU library: ${GGML_CPU_LOCATION}")
 link_libraries(${GGML_CPU_LOCATION})
 
