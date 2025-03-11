@@ -1,5 +1,5 @@
-whisper-cpp (1.7.4+95-2) unstable; urgency=medium
+whisper-cpp (1.7.4+203-1) unstable; urgency=medium
 
-  * Improve packaging based on mentoring feedback
+  * Update upstream
 
- -- Mathieu Baudier <mbaudier@argeo.org>  Sun, 23 Feb 2025 11:39:50 +0000
+ -- Mathieu Baudier <mbaudier@argeo.org>  Tue, 11 Mar 2025 14:06:57 +0000

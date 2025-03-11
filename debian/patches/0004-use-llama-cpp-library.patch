@@ -1,17 +1,16 @@
 From: Mathieu Baudier <mbaudier@argeo.org>
-Date: Mon, 27 Jan 2025 08:09:55 +0100
+Date: Tue, 11 Mar 2025 15:40:11 +0100
 Subject: use-llama-cpp-library
 
-Use llma.cpp shared library to build talk-llama
 ---
- examples/talk-llama/CMakeLists.txt | 24 +++---------------------
- 1 file changed, 3 insertions(+), 21 deletions(-)
+ examples/talk-llama/CMakeLists.txt | 25 ++++---------------------
+ 1 file changed, 4 insertions(+), 21 deletions(-)
 
 diff --git a/examples/talk-llama/CMakeLists.txt b/examples/talk-llama/CMakeLists.txt
-index c15c6b5..c975d42 100644
+index aea1ae6..f86a338 100644
 --- a/examples/talk-llama/CMakeLists.txt
 +++ b/examples/talk-llama/CMakeLists.txt
-@@ -3,32 +3,14 @@ if (WHISPER_SDL2)
+@@ -3,29 +3,12 @@ if (WHISPER_SDL2)
      set(CMAKE_CXX_STANDARD_REQUIRED ON)
  
      set(TARGET whisper-talk-llama)
@@ -38,12 +37,10 @@ index c15c6b5..c975d42 100644
 +    add_executable(${TARGET} talk-llama.cpp)
      target_include_directories(${TARGET} PRIVATE ${SDL2_INCLUDE_DIRS})
  
-     if (WHISPER_CLBLAST)
-         set(CLBLAST_LIBNAME clblast)
-     endif ()
--    target_link_libraries(${TARGET} PRIVATE common common-sdl whisper ${SDL2_LIBRARIES} ${CLBLAST_LIBNAME} ${CMAKE_THREAD_LIBS_INIT})
-+    target_link_libraries(${TARGET} PRIVATE common common-sdl whisper llama ${SDL2_LIBRARIES} ${CLBLAST_LIBNAME} ${CMAKE_THREAD_LIBS_INIT})
-+    install(TARGETS ${TARGET} RUNTIME)
+-    target_link_libraries(${TARGET} PRIVATE common common-sdl whisper ${SDL2_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
++    target_link_libraries(${TARGET} PRIVATE common common-sdl whisper llama ${SDL2_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
++
++	install(TARGETS ${TARGET} RUNTIME)
  
      if(WIN32)
          # It requires Windows 8.1 or later for PrefetchVirtualMemory

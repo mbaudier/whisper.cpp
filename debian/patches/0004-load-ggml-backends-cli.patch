@@ -1,0 +1,22 @@
+From: Mathieu Baudier <mbaudier@argeo.org>
+Date: Tue, 11 Mar 2025 16:22:18 +0100
+Subject: load-ggml-backends-cli
+
+---
+ examples/cli/cli.cpp | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/examples/cli/cli.cpp b/examples/cli/cli.cpp
+index a84d3cb..d891c82 100644
+--- a/examples/cli/cli.cpp
++++ b/examples/cli/cli.cpp
+@@ -929,6 +929,9 @@ int main(int argc, char ** argv) {
+     SetConsoleOutputCP(CP_UTF8);
+ #endif
+ 
++	// make sure GGML backends are loaded
++	ggml_backend_load_all();
++
+     whisper_params params;
+ 
+     // If the only argument starts with "@", read arguments line-by-line

@@ -19,18 +19,6 @@ add_library(ggml SHARED IMPORTED GLOBAL)
 set_target_properties(ggml PROPERTIES IMPORTED_LOCATION ${GGML_LOCATION})
 # transitive dependency
 target_link_libraries(ggml INTERFACE ${GGML_BASE_LOCATION})
-
-# libwhisper actually link against a CPU backend
-#find_library(GGML_CPU_LOCATION ggml-cpu)
-# FIXME better way to find CPU backend
-set(GGML_CPU_LOCATION /usr/libexec/${CMAKE_LIBRARY_ARCHITECTURE}/ggml/libggml-cpu-sandybridge.so)
-message (STATUS "Found GGML CPU library: ${GGML_CPU_LOCATION}")
-link_libraries(${GGML_CPU_LOCATION})
-
-# Not clear whether a libggml-cpu is actually needed.
-# LD_LIBRARY_PATH=/usr/libexec/*/ggml would have to be used in that case
-# It could be more robust to set RPATH, but it causes lintian errors:
-#set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/libexec/${CMAKE_LIBRARY_ARCHITECTURE}/ggml")
 endif()
 
 add_compile_definitions(NDEBUG)
