@@ -1,5 +1,5 @@
-whisper-cpp (1.7.5-1) unstable; urgency=medium
+whisper-cpp (1.7.5+105-1) unstable; urgency=medium
 
   * Update upstream
 
- -- Mathieu Baudier <mbaudier@argeo.org>  Thu, 03 Apr 2025 11:55:43 +0000
+ -- Mathieu Baudier <mbaudier@argeo.org>  Sat, 26 Apr 2025 15:31:43 +0000
