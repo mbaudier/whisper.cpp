@@ -8,7 +8,7 @@ Disable some unused examples
  1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/examples/CMakeLists.txt b/examples/CMakeLists.txt
-index e1b083d..3d45d4c 100644
+index e4265af..0109886 100644
 --- a/examples/CMakeLists.txt
 +++ b/examples/CMakeLists.txt
 @@ -102,16 +102,16 @@ elseif(CMAKE_JS_VERSION)
