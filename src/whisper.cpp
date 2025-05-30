@@ -37,10 +37,6 @@
 
 // dummy
 
-#if defined(_MSC_VER)
-#pragma warning(disable: 4244 4267) // possible loss of data
-#endif
-
 #if defined(WHISPER_BIG_ENDIAN)
 template<typename T>
 static T byteswap(T value) {
@@ -4501,7 +4497,7 @@ static void whisper_grammar_advance_stack(
         std::vector<std::vector<const whisper_grammar_element *>> & new_stacks) {
 
     if (stack.empty()) {
-        new_stacks.push_back(stack);
+        new_stacks.emplace_back();
         return;
     }
 
