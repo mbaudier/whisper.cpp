@@ -3,3 +3,5 @@
 
 /usr/bin/whisper-talk-llama
 /usr/libexec/*/ggml/whisper-talk-llama
+
+/usr/bin/vad-speech-segments

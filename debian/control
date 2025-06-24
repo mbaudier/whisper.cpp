@@ -5,7 +5,7 @@ Maintainer: Mathieu Baudier <mbaudier@argeo.org>
 Build-Depends: debhelper-compat (= 13), pkgconf,
 	cmake-data, cmake,
 	libsdl2-dev,
-	ggml-dev, libggml-cpu,
+	ggml-dev,
 	libllama0-dev,
 Standards-Version: 4.7.0
 Vcs-Git: https://git.djapps.eu/pkg/ggml/sources/whisper.cpp
@@ -19,7 +19,7 @@ Architecture: any
 Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends}, ${shlibs:Depends},
- libggml0, libggml-cpu
+ libggml0
 Description: Inference of Whisper in pure C/C++ (shared library)
  The shared library provides the core of whisper.cpp
  speech-to-text capabilities using a Whisper model.

@@ -3,14 +3,14 @@ Date: Tue, 11 Mar 2025 15:40:11 +0100
 Subject: use-llama-cpp-library
 
 ---
- examples/talk-llama/CMakeLists.txt | 28 ++++------------------------
- 1 file changed, 4 insertions(+), 24 deletions(-)
+ examples/talk-llama/CMakeLists.txt | 32 ++++----------------------------
+ 1 file changed, 4 insertions(+), 28 deletions(-)
 
 diff --git a/examples/talk-llama/CMakeLists.txt b/examples/talk-llama/CMakeLists.txt
-index 3e3971a..f86a338 100644
+index 13ecced..f86a338 100644
 --- a/examples/talk-llama/CMakeLists.txt
 +++ b/examples/talk-llama/CMakeLists.txt
-@@ -3,32 +3,12 @@ if (WHISPER_SDL2)
+@@ -3,36 +3,12 @@ if (WHISPER_SDL2)
      set(CMAKE_CXX_STANDARD_REQUIRED ON)
  
      set(TARGET whisper-talk-llama)
@@ -27,10 +27,14 @@ index 3e3971a..f86a338 100644
 -        llama-hparams.cpp
 -        llama-impl.cpp
 -        llama-io.cpp
--        llama-kv-cache.cpp
+-        llama-kv-cache-unified.cpp
+-        llama-kv-cache-unified-iswa.cpp
+-        llama-memory-recurrent.cpp
+-        llama-memory-hybrid.cpp
 -        llama-memory.cpp
 -        llama-mmap.cpp
 -        llama-model-loader.cpp
+-        llama-model-saver.cpp
 -        llama-model.cpp
 -        llama-quant.cpp
 -        llama-sampling.cpp
