@@ -1,2 +1,11 @@
 #!/bin/sh
+
+# whisper-talk-llama can use a TTS system for the assistant answers.
+# It expects a whisper-speak in its path which will understand the following argument:
+# $1 : Voice ID
+# $2 : Path to the generated answer as text
+#
+# In this implementation, we wrap espeak for (British) English.
+# It is therefore recommended to use the --translate argument of whisper-talk-llama
+
 espeak-ng -v en-gb+m$1 -s 225 -p 50 -a 200 -g 5 -k 5 -f $2
