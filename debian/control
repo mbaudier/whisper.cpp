@@ -64,13 +64,3 @@ Depends: ${misc:Depends},
 Description: Inference of Whisper in pure C/C++ (development files)
  Development files for using whisper.cpp as a shared library
  in applications.
-
-Package: whisper-cpp-dev
-Section: libdevel
-Architecture: any
-Depends: ${misc:Depends},
- libwhisper1-dev (= ${binary:Version})
-Description: Inference of Whisper in pure C/C++ (common static library)
- Development files and static libraries of the used to build the tools.
- These components speeds up the development but are likely to have less
- stable APIs.

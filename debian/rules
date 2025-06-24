@@ -25,7 +25,6 @@ override_dh_auto_configure:
 	dh_auto_configure -- \
 	-DCMAKE_LIBRARY_ARCHITECTURE="$(DEB_HOST_MULTIARCH)" \
 	-DCMAKE_BUILD_TYPE=RelWithDebInfo \
-	-DCMAKE_PROJECT_whisper.cpp_INCLUDE=debian/cmake/debian-whisper.cpp.cmake \
 	\
 	-DBUILD_SHARED_LIBS=ON \
 	-DWHISPER_USE_SYSTEM_GGML=ON \
