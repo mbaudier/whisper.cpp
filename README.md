@@ -25,6 +25,7 @@ High-performance inference of [OpenAI's Whisper](https://github.com/openai/whisp
 - [Ascend NPU Support](#ascend-npu-support)
 - [Moore Threads GPU Support](#moore-threads-gpu-support)
 - [C-style API](https://github.com/ggml-org/whisper.cpp/blob/master/include/whisper.h)
+- [Voice Activity Detection (VAD)](#voice-activity-detection-vad)
 
 Supported platforms:
 
@@ -34,7 +35,7 @@ Supported platforms:
 - [x] [Java](bindings/java/README.md)
 - [x] Linux / [FreeBSD](https://github.com/ggml-org/whisper.cpp/issues/56#issuecomment-1350920264)
 - [x] [WebAssembly](examples/whisper.wasm)
-- [x] Windows ([MSVC](https://github.com/ggml-org/whisper.cpp/blob/master/.github/workflows/build.yml#L117-L144) and [MinGW](https://github.com/ggml-org/whisper.cpp/issues/168)]
+- [x] Windows ([MSVC](https://github.com/ggml-org/whisper.cpp/blob/master/.github/workflows/build.yml#L117-L144) and [MinGW](https://github.com/ggml-org/whisper.cpp/issues/168))
 - [x] [Raspberry Pi](https://github.com/ggml-org/whisper.cpp/discussions/166)
 - [x] [Docker](https://github.com/ggml-org/whisper.cpp/pkgs/container/whisper.cpp)
 
@@ -266,7 +267,7 @@ This can result in significant speedup in encoder performance. Here are the inst
 
 - Build `whisper.cpp` with OpenVINO support:
 
-  Download OpenVINO package from [release page](https://github.com/openvinotoolkit/openvino/releases). The recommended version to use is [2023.0.0](https://github.com/openvinotoolkit/openvino/releases/tag/2023.0.0).
+  Download OpenVINO package from [release page](https://github.com/openvinotoolkit/openvino/releases). The recommended version to use is [2024.6.0](https://github.com/openvinotoolkit/openvino/releases/tag/2024.6.0). Ready to use Binaries of the required libraries can be found in the [OpenVino Archives](https://storage.openvinotoolkit.org/repositories/openvino/packages/2024.6/)
 
   After downloading & extracting package onto your development system, set up required environment by sourcing setupvars script. For example:
 
@@ -385,7 +386,7 @@ Run the inference examples as usual, for example:
 ## Moore Threads GPU support
 
 With Moore Threads cards the processing of the models is done efficiently on the GPU via muBLAS and custom MUSA kernels.
-First, make sure you have installed `MUSA SDK rc3.1.1`: https://developer.mthreads.com/sdk/download/musa?equipment=&os=&driverVersion=&version=rc3.1.1
+First, make sure you have installed `MUSA SDK rc4.0.1`: https://developer.mthreads.com/sdk/download/musa?equipment=&os=&driverVersion=&version=4.0.1
 
 Now build `whisper.cpp` with MUSA support:
 
@@ -599,7 +600,7 @@ main: processing './samples/a13.wav' (480000 samples, 30.0 sec), 4 threads, 1 pr
 ## Karaoke-style movie generation (experimental)
 
 The [whisper-cli](examples/cli) example provides support for output of karaoke-style movies, where the
-currently pronounced word is highlighted. Use the `-wts` argument and run the generated bash script.
+currently pronounced word is highlighted. Use the `-owts` argument and run the generated bash script.
 This requires to have `ffmpeg` installed.
 
 Here are a few _"typical"_ examples:
@@ -731,6 +732,89 @@ let package = Package(
     ]
 )
 ```
+
+## Voice Activity Detection (VAD)
+Support for Voice Activity Detection (VAD) can be enabled using the `--vad`
+argument to `whisper-cli`. In addition to this option a VAD model is also
+required.
+
+The way this works is that first the audio samples are passed through
+the VAD model which will detect speech segments. Using this information the
+only the speech segments that are detected are extracted from the original audio
+input and passed to whisper for processing. This reduces the amount of audio
+data that needs to be processed by whisper and can significantly speed up the
+transcription process.
+
+The following VAD models are currently supported:
+
+### Silero-VAD
+[Silero-vad](https://github.com/snakers4/silero-vad) is a lightweight VAD model
+written in Python that is fast and accurate.
+
+Models can be downloaded by running the following command on Linux or MacOS:
+```console
+$ ./models/download-vad-model.sh silero-v5.1.2
+Downloading ggml model silero-v5.1.2 from 'https://huggingface.co/ggml-org/whisper-vad' ...
+ggml-silero-v5.1.2.bin        100%[==============================================>] 864.35K  --.-KB/s    in 0.04s
+Done! Model 'silero-v5.1.2' saved in '/path/models/ggml-silero-v5.1.2.bin'
+You can now use it like this:
+
+  $ ./build/bin/whisper-cli -vm /path/models/ggml-silero-v5.1.2.bin --vad -f samples/jfk.wav -m models/ggml-base.en.bin
+
+```
+And the following command on Windows:
+```console
+> .\models\download-vad-model.cmd silero-v5.1.2
+Downloading vad model silero-v5.1.2...
+Done! Model silero-v5.1.2 saved in C:\Users\danie\work\ai\whisper.cpp\ggml-silero-v5.1.2.bin
+You can now use it like this:
+
+C:\path\build\bin\Release\whisper-cli.exe -vm C:\path\ggml-silero-v5.1.2.bin --vad -m models/ggml-base.en.bin -f samples\jfk.wav
+
+```
+
+To see a list of all available models, run the above commands without any
+arguments.
+
+This model can be also be converted manually to ggml using the following command:
+```console
+$ python3 -m venv venv && source venv/bin/activate
+$ (venv) pip install silero-vad
+$ (venv) $ python models/convert-silero-vad-to-ggml.py --output models/silero.bin
+Saving GGML Silero-VAD model to models/silero-v5.1.2-ggml.bin
+```
+And it can then be used with whisper as follows:
+```console
+$ ./build/bin/whisper-cli \
+   --file ./samples/jfk.wav \
+   --model ./models/ggml-base.en.bin \
+   --vad \
+   --vad-model ./models/silero-v5.1.2-ggml.bin
+```
+
+### VAD Options
+
+* --vad-threshold: Threshold probability for speech detection. A probability
+for a speech segment/frame above this threshold will be considered as speech.
+
+* --vad-min-speech-duration-ms: Minimum speech duration in milliseconds. Speech
+segments shorter than this value will be discarded to filter out brief noise or
+false positives.
+
+* --vad-min-silence-duration-ms: Minimum silence duration in milliseconds. Silence
+periods must be at least this long to end a speech segment. Shorter silence
+periods will be ignored and included as part of the speech.
+
+* --vad-max-speech-duration-s: Maximum speech duration in seconds. Speech segments
+longer than this will be automatically split into multiple segments at silence
+points exceeding 98ms to prevent excessively long segments.
+
+* --vad-speech-pad-ms: Speech padding in milliseconds. Adds this amount of padding
+before and after each detected speech segment to avoid cutting off speech edges.
+
+* --vad-samples-overlap: Amount of audio to extend from each speech segment into
+the next one, in seconds (e.g., 0.10 = 100ms overlap). This ensures speech isn't
+cut off abruptly between segments when they're concatenated together.
 
 ## Examples
 

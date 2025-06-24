@@ -59,9 +59,6 @@ option(BUILD_SHARED_LIBS "build shared libraries" ${BUILD_SHARED_LIBS_DEFAULT})
 # option list
 #
 
-# general
-option(WHISPER_CCACHE "whisper: use ccache if available" ON)
-
 # debug
 option(WHISPER_ALL_WARNINGS           "whisper: enable all compiler warnings"                   ON)
 option(WHISPER_ALL_WARNINGS_3RD_PARTY "whisper: enable all compiler warnings in 3rd party libs" OFF)
@@ -96,7 +93,6 @@ option(WHISPER_OPENVINO              "whisper: support for OpenVINO"      OFF)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/build-info.cmake)
 
 # override ggml options
-set(GGML_CCACHE             ${WHISPER_CCACHE})
 set(GGML_SANITIZE_THREAD    ${WHISPER_SANITIZE_THREAD})
 set(GGML_SANITIZE_ADDRESS   ${WHISPER_SANITIZE_ADDRESS})
 set(GGML_SANITIZE_UNDEFINED ${WHISPER_SANITIZE_UNDEFINED})
@@ -121,6 +117,12 @@ whisper_option_depr(WARNING     WHISPER_OPENMP              GGML_OPENMP)
 whisper_option_depr(WARNING     WHISPER_RPC                 GGML_RPC)
 whisper_option_depr(WARNING     WHISPER_SYCL                GGML_SYCL)
 whisper_option_depr(WARNING     WHISPER_SYCL_F16            GGML_SYCL_F16)
+whisper_option_depr(WARNING     WHISPER_CCACHE              GGML_CCACHE)
+
+if (GGML_CUDA AND NOT MSVC)
+    #GGML_CUDA enabled, add the necessary compile options -Wno-deprecated-gpu-targets
+    add_compile_options(-Wno-deprecated-gpu-targets)
+endif()
 
 #
 # build the library
@@ -244,5 +246,6 @@ if (MSVC)
         disable_msvc_warnings(whisper-talk-llama)
         disable_msvc_warnings(whisper-bench)
         disable_msvc_warnings(quantize)
+        disable_msvc_warnings(vad-speech-segments)
     endif()
 endif()
