@@ -7,10 +7,10 @@ Subject: load-ggml-backends-cli
  1 file changed, 3 insertions(+)
 
 diff --git a/examples/cli/cli.cpp b/examples/cli/cli.cpp
-index f73ed9a..4640bdd 100644
+index 457a1ff..04cacc9 100644
 --- a/examples/cli/cli.cpp
 +++ b/examples/cli/cli.cpp
-@@ -918,6 +918,9 @@ int main(int argc, char ** argv) {
+@@ -920,6 +920,9 @@ int main(int argc, char ** argv) {
      SetConsoleOutputCP(CP_UTF8);
  #endif
  

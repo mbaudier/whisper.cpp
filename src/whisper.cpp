@@ -252,45 +252,6 @@ static void whisper_set_i32_nd(struct ggml_tensor * t, int64_t i0, int64_t i1, i
     *(int32_t *) data = v;
 }
 
-// faster matrix multiplications for tensors that do not have dimension 0 divisible by "pad"
-// the idea is to represent the original matrix multiplication:
-//
-//   Z = X @ Y
-//
-// with the sum of two matrix multiplications:
-//
-//   Z = (X_0 @ Y_0) + (X_1 @ Y_1)
-//
-// here X_0 and Y_0 are views of X and Y that have dimension 0 divisible by "pad"
-// and X_1 and Y_1 are the remaining views. X_1 and Y_1 end up being small matrices that can be processed with more
-// general-purpose kernels
-//
-static struct ggml_tensor * ggml_mul_mat_pad(struct ggml_context * ctx, struct ggml_tensor * x, struct ggml_tensor * y, int pad = 32) {
-    // use padding only if dimension 0 is at least 8 times larger than the padding
-    // else we won't get much benefit from the optimization
-    const int n_pad_req = 8;
-
-    if (x->ne[0] % pad == 0 || x->ne[0] / pad < n_pad_req) {
-        return ggml_mul_mat(ctx, x, y);
-    }
-
-    struct ggml_tensor * x_0 = ggml_view_3d(ctx, x, (x->ne[0]/pad)*pad, x->ne[1], x->ne[2], x->nb[1], x->nb[2], 0);
-    struct ggml_tensor * x_1 = ggml_view_3d(ctx, x,  x->ne[0]%pad,      x->ne[1], x->ne[2], x->nb[1], x->nb[2], x_0->ne[0]*x_0->nb[0]);
-
-    struct ggml_tensor * y_0 = ggml_view_3d(ctx, y, (y->ne[0]/pad)*pad, y->ne[1], y->ne[2], y->nb[1], y->nb[2], 0);
-    struct ggml_tensor * y_1 = ggml_view_3d(ctx, y,  y->ne[0]%pad,      y->ne[1], y->ne[2], y->nb[1], y->nb[2], y_0->ne[0]*y_0->nb[0]);
-
-    return ggml_add(ctx,
-            ggml_mul_mat(ctx, x_0, y_0),
-            ggml_mul_mat(ctx, x_1, y_1));
-}
-
-// TODO: check if other platforms can benefit from this optimization
-// TODO: CUDA is currently broken - seems ggml_mul_mat does not handle views correctly
-#if defined(GGML_USE_METAL)
-#define ggml_mul_mat ggml_mul_mat_pad
-#endif
-
 // available whisper models
 enum e_model {
     MODEL_UNKNOWN,
@@ -1327,7 +1288,7 @@ static ggml_backend_t whisper_backend_init_gpu(const whisper_context_params & pa
         for (size_t i = 0; i < ggml_backend_dev_count(); ++i) {
             ggml_backend_dev_t dev_cur = ggml_backend_dev_get(i);
             if (ggml_backend_dev_type(dev_cur) == GGML_BACKEND_DEVICE_TYPE_GPU) {
-                if (cnt == 0 || cnt == params.gpu_device) {
+                if (cnt == params.gpu_device) {
                     dev = dev_cur;
                 }
 
@@ -1396,7 +1357,7 @@ static buft_list_t make_buft_list(whisper_context_params & params) {
         for (size_t i = 0; i < ggml_backend_dev_count(); ++i) {
             ggml_backend_dev_t dev = ggml_backend_dev_get(i);
             if (ggml_backend_dev_type(dev) == GGML_BACKEND_DEVICE_TYPE_GPU) {
-                if (cnt == 0 || cnt == params.gpu_device) {
+                if (cnt == params.gpu_device) {
                     auto * buft = ggml_backend_dev_buffer_type(dev);
                     if (buft) {
                         buft_list.emplace_back(dev, buft);
@@ -1438,7 +1399,8 @@ static bool weight_buft_supported(const whisper_hparams & hparams, ggml_tensor *
         op_supported = true;
     } else {
         switch (op) {
-            // The current extra_buffer_type implementations only support GGML_OP_MUL_MAT
+            // The current extra_buffer_type implementations only support GGML_OP_MUL_MAT and GGML_OP_GET_ROWS
+            case GGML_OP_GET_ROWS:
             case GGML_OP_MUL_MAT: {
                 ggml_init_params params = {
                     /*.mem_size   =*/ 2 * ggml_tensor_overhead(),
@@ -1454,9 +1416,15 @@ static bool weight_buft_supported(const whisper_hparams & hparams, ggml_tensor *
 
                 ggml_tensor * op_tensor = nullptr;
 
-                int64_t n_ctx = hparams.n_audio_ctx;
-                ggml_tensor * b = ggml_new_tensor_4d(ctx, GGML_TYPE_F32, w->ne[0], n_ctx, w->ne[2], w->ne[3]);
-                op_tensor = ggml_mul_mat(ctx, w, b);
+                if (op == GGML_OP_MUL_MAT) {
+                    int64_t n_ctx = hparams.n_audio_ctx;
+                    ggml_tensor * b = ggml_new_tensor_4d(ctx, GGML_TYPE_F32, w->ne[0], n_ctx, w->ne[2], w->ne[3]);
+                    op_tensor = ggml_mul_mat(ctx, w, b);
+                } else if (op == GGML_OP_GET_ROWS) {
+                    int64_t num_indices = 8;
+                    ggml_tensor * indices = ggml_new_tensor_1d(ctx, GGML_TYPE_I32, num_indices);
+                    op_tensor = ggml_get_rows(ctx, w, indices);
+                }
 
                 // create a temporary dummy buffer for the weight so that supports_op can check the buffer type
                 GGML_ASSERT(w->buffer == nullptr);
@@ -2425,6 +2393,8 @@ static bool whisper_encode_internal(
                 return false;
             }
         } else {
+            ggml_backend_sched_reset(sched);
+
 #if defined(WHISPER_USE_COREML)
             whisper_coreml_encode(wstate.ctx_coreml, mel->ne[0], mel->ne[1], (float *) mel->data, (float *) wstate.embd_enc->data);
 #elif defined(WHISPER_USE_OPENVINO)
@@ -3622,7 +3592,7 @@ int whisper_ctx_init_openvino_encoder(
 struct whisper_context_params whisper_context_default_params() {
     struct whisper_context_params result = {
         /*.use_gpu              =*/ true,
-        /*.flash_attn           =*/ false,
+        /*.flash_attn           =*/ true,
         /*.gpu_device           =*/ 0,
 
         /*.dtw_token_timestamps =*/ false,

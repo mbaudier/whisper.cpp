@@ -8,10 +8,10 @@ Disable some unused examples
  1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/examples/CMakeLists.txt b/examples/CMakeLists.txt
-index c37a2e6..f2588b0 100644
+index b202ca0..1e0c9f6 100644
 --- a/examples/CMakeLists.txt
 +++ b/examples/CMakeLists.txt
-@@ -102,17 +102,17 @@ elseif(CMAKE_JS_VERSION)
+@@ -103,17 +103,17 @@ elseif(CMAKE_JS_VERSION)
      add_subdirectory(addon.node)
  else()
      add_subdirectory(cli)
@@ -34,7 +34,7 @@ index c37a2e6..f2588b0 100644
          endif()
      endif (WHISPER_SDL2)
  
-@@ -120,5 +120,5 @@ else()
+@@ -121,5 +121,5 @@ else()
  endif()
  
  if (WHISPER_SDL2)

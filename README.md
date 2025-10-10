@@ -7,7 +7,7 @@
 [![Conan Center](https://shields.io/conan/v/whisper-cpp)](https://conan.io/center/whisper-cpp)
 [![npm](https://img.shields.io/npm/v/whisper.cpp.svg)](https://www.npmjs.com/package/whisper.cpp/)
 
-Stable: [v1.7.6](https://github.com/ggml-org/whisper.cpp/releases/tag/v1.7.6) / [Roadmap](https://github.com/orgs/ggml-org/projects/4/)
+Stable: [v1.8.0](https://github.com/ggml-org/whisper.cpp/releases/tag/v1.8.0) / [Roadmap](https://github.com/orgs/ggml-org/projects/4/)
 
 High-performance inference of [OpenAI's Whisper](https://github.com/openai/whisper) automatic speech recognition (ASR) model:
 
@@ -386,7 +386,7 @@ Run the inference examples as usual, for example:
 ## Moore Threads GPU support
 
 With Moore Threads cards the processing of the models is done efficiently on the GPU via muBLAS and custom MUSA kernels.
-First, make sure you have installed `MUSA SDK rc4.0.1`: https://developer.mthreads.com/sdk/download/musa?equipment=&os=&driverVersion=&version=4.0.1
+First, make sure you have installed `MUSA SDK rc4.2.0`: https://developer.mthreads.com/sdk/download/musa?equipment=&os=&driverVersion=&version=4.2.0
 
 Now build `whisper.cpp` with MUSA support:
 

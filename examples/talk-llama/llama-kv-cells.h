@@ -11,7 +11,7 @@
 
 // meta information about KV cells that can be part of multiple sequences at the same time
 // TODO: add unit tests
-class llama_kv_cells_unified {
+class llama_kv_cells {
 public:
     void reset() {
         for (uint32_t i = 0; i < pos.size(); ++i) {
@@ -77,68 +77,120 @@ public:
     }
 
     // move cell isrc to idst (used during defrag)
-    void mv(uint32_t isrc, uint32_t idst) {
-        assert(isrc < pos.size());
-        assert(idst < pos.size());
+    //void mv(uint32_t isrc, uint32_t idst) {
+    //    assert(isrc < pos.size());
+    //    assert(idst < pos.size());
 
-        assert(pos[idst] == -1);
-        assert(pos[isrc] != -1);
+    //    assert(pos[idst] == -1);
+    //    assert(pos[isrc] != -1);
 
-        pos  [idst] = pos  [isrc];
-        shift[idst] = shift[isrc];
-        seq  [idst] = seq  [isrc];
+    //    pos  [idst] = pos  [isrc];
+    //    shift[idst] = shift[isrc];
+    //    seq  [idst] = seq  [isrc];
 
-        pos  [isrc] = -1;
-        shift[isrc] =  0;
-        seq  [isrc].reset();
+    //    pos  [isrc] = -1;
+    //    shift[isrc] =  0;
+    //    seq  [isrc].reset();
 
-        used.erase (isrc);
-        used.insert(idst);
-    }
+    //    used.erase (isrc);
+    //    used.insert(idst);
+    //}
 
     // copy the state of cells [i, i + n) (used for save/restore the state of the cells)
-    llama_kv_cells_unified cp(uint32_t i, uint32_t n) const {
+    llama_kv_cells cp(uint32_t i, uint32_t n) const {
         assert(i + n <= pos.size());
 
-        llama_kv_cells_unified res;
+        llama_kv_cells res;
 
         res.resize(n);
 
         for (uint32_t j = 0; j < n; ++j) {
-            res.pos[j] = pos[i + j];
-            res.seq[j] = seq[i + j];
+            const auto idx = i + j;
 
-            assert(shift[i + j] == 0);
+            res.pos[j] = pos[idx];
+            res.seq[j] = seq[idx];
+
+            assert(shift[idx] == 0);
+        }
+
+        return res;
+    }
+
+    // copy the state of cells [idxs[0], idxs[1], ..., idxs[idxs.size() - 1])
+    llama_kv_cells cp(const std::vector<uint32_t> & idxs) const {
+        llama_kv_cells res;
+
+        res.resize(idxs.size());
+
+        for (uint32_t j = 0; j < idxs.size(); ++j) {
+            const auto idx = idxs[j];
+
+            res.pos[j] = pos[idx];
+            res.seq[j] = seq[idx];
+
+            assert(shift[idx] == 0);
         }
 
         return res;
     }
 
     // set the state of cells [i, i + other.pos.size()) (used for save/restore the state of the cells)
-    void set(uint32_t i, const llama_kv_cells_unified & other) {
+    void set(uint32_t i, const llama_kv_cells & other) {
         assert(i + other.pos.size() <= pos.size());
 
         for (uint32_t j = 0; j < other.pos.size(); ++j) {
-            if (pos[i + j] == -1 && other.pos[j] != -1) {
+            const auto idx = i + j;
+
+            if (pos[idx] == -1 && other.pos[j] != -1) {
                 used.insert(i + j);
             }
 
-            if (pos[i + j] != -1 && other.pos[j] == -1) {
+            if (pos[idx] != -1 && other.pos[j] == -1) {
                 used.erase(i + j);
             }
 
-            if (pos[i + j] != -1) {
+            if (pos[idx] != -1) {
                 seq_pos_rm(i + j);
             }
 
-            pos[i + j] = other.pos[j];
-            seq[i + j] = other.seq[j];
+            pos[idx] = other.pos[j];
+            seq[idx] = other.seq[j];
 
-            if (pos[i + j] != -1) {
+            if (pos[idx] != -1) {
                 seq_pos_add(i + j);
             }
 
-            assert(shift[i + j] == 0);
+            assert(shift[idx] == 0);
+        }
+    }
+
+    // set the state of cells [idxs[0], idxs[1], ..., idxs[idxs.size() - 1])
+    void set(const std::vector<uint32_t> & idxs, const llama_kv_cells & other) {
+        assert(idxs.size() == other.pos.size());
+
+        for (uint32_t j = 0; j < other.pos.size(); ++j) {
+            const auto idx = idxs[j];
+
+            if (pos[idx] == -1 && other.pos[j] != -1) {
+                used.insert(idx);
+            }
+
+            if (pos[idx] != -1 && other.pos[j] == -1) {
+                used.erase(idx);
+            }
+
+            if (pos[idx] != -1) {
+                seq_pos_rm(idx);
+            }
+
+            pos[idx] = other.pos[j];
+            seq[idx] = other.seq[j];
+
+            if (pos[idx] != -1) {
+                seq_pos_add(idx);
+            }
+
+            assert(shift[idx] == 0);
         }
     }
 
