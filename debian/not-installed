@@ -1,4 +1,5 @@
 /usr/bin/whisper-command
 /usr/libexec/*/ggml/whisper-command
 
-/usr/bin/vad-speech-segments
+/usr/bin/whisper-vad-speech-segments
+/usr/libexec/*/ggml/whisper-vad-speech-segments
