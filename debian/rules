@@ -2,6 +2,8 @@
 # See debhelper(7) (uncomment to enable)
 #export DH_VERBOSE = 1
 
+export DEB_BUILD_MAINT_OPTIONS = hardening=-all
+
 # multiarch
 include /usr/share/dpkg/architecture.mk
 
@@ -11,29 +13,30 @@ install_lib=debian/tmp/usr/lib
 install_lib_multiarch=debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)
 install_libexec_multiarch=debian/tmp/usr/libexec/$(DEB_HOST_MULTIARCH)
 
-# parallelism
-DEB_BUILD_OPTIONS ?= parallel=8
+CMAKE_FLAGS =  \
+               -DCMAKE_LIBRARY_ARCHITECTURE="$(DEB_HOST_MULTIARCH)" \
+               -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+               \
+               -DBUILD_SHARED_LIBS=ON \
+               -DWHISPER_USE_SYSTEM_GGML=ON \
+               -DCMAKE_LIBRARY_PATH=/usr/libexec/$(DEB_HOST_MULTIARCH)/ggml \
+               \
+               -DWHISPER_BUILD_TESTS=OFF \
+               -DWHISPER_BUILD_EXAMPLES=ON \
+               -DWHISPER_FFMPEG=OFF \
+               -DWHISPER_SDL2=ON \
 
-# hardening
-export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+FLAGS_ARGEO=-O3 -g -DNDEBUG
+
+CMAKE_FLAGS += -DCMAKE_C_FLAGS_RELWITHDEBINFO="$(FLAGS_ARGEO)" \
+               -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="$(FLAGS_ARGEO)" \
 
 %:
 # Use build/ for output, so that it is in the .gitignore of upstream
 	dh $@ --buildsystem=cmake --builddirectory=$(build_multiarch)
 
 override_dh_auto_configure:
-	dh_auto_configure -- \
-	-DCMAKE_LIBRARY_ARCHITECTURE="$(DEB_HOST_MULTIARCH)" \
-	-DCMAKE_BUILD_TYPE=RelWithDebInfo \
-	\
-	-DBUILD_SHARED_LIBS=ON \
-	-DWHISPER_USE_SYSTEM_GGML=ON \
-	-DCMAKE_LIBRARY_PATH=/usr/libexec/$(DEB_HOST_MULTIARCH)/ggml \
-	\
-	-DWHISPER_BUILD_TESTS=OFF \
-	-DWHISPER_BUILD_EXAMPLES=ON \
-	-DWHISPER_FFMPEG=OFF \
-	-DWHISPER_SDL2=ON \
+	dh_auto_configure -- $(CMAKE_FLAGS)
 
 override_dh_auto_install:
 	dh_auto_install

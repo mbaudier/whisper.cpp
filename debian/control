@@ -18,8 +18,7 @@ Package: libwhisper1
 Section: libs
 Architecture: any
 Multi-Arch: same
-Depends: libggml0
-         ${misc:Depends},
+Depends: ${misc:Depends},
          ${shlibs:Depends}
 Description: Inference of Whisper in pure C/C++ (shared library)
  The shared library provides the core of whisper.cpp
@@ -28,7 +27,7 @@ Description: Inference of Whisper in pure C/C++ (shared library)
 Package: whisper.cpp-cli
 Architecture: any
 Multi-Arch: same
-Depends: libwhisper1,
+Depends: libggml0-backend-cpu,
          ${misc:Depends},
          ${shlibs:Depends}
 Description: Inference of Whisper in pure C/C++ (CLI)
@@ -38,8 +37,7 @@ Description: Inference of Whisper in pure C/C++ (CLI)
 Package: whisper.cpp-stream
 Architecture: any
 Multi-Arch: same
-Depends: libwhisper1,
-         libsdl2-2.0-0,
+Depends: libggml0-backend-cpu,
          ${misc:Depends},
          ${shlibs:Depends}
 Description: Inference of Whisper in pure C/C++ (stream)
@@ -50,13 +48,7 @@ Description: Inference of Whisper in pure C/C++ (stream)
 Package: whisper.cpp-talk-llama
 Architecture: any
 Multi-Arch: same
-Depends: libwhisper1,
-         libllama0,
-         espeak-ng,
-         libswresample4,
-         libavcodec59,
-         libavformat59,
-         libsdl2-2.0-0,
+Depends: libggml0-backend-cpu,
          ${misc:Depends},
          ${shlibs:Depends}
 Description: Inference of Whisper in pure C/C++ (talk-llama)

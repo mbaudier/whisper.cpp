@@ -4,15 +4,18 @@ Subject: use-llama-cpp-library
 
 # Conflicts:
 #	examples/talk-llama/CMakeLists.txt
+
+# Conflicts:
+#	examples/talk-llama/CMakeLists.txt
 ---
- examples/talk-llama/CMakeLists.txt | 36 ++++--------------------------------
- 1 file changed, 4 insertions(+), 32 deletions(-)
+ examples/talk-llama/CMakeLists.txt | 37 ++++---------------------------------
+ 1 file changed, 4 insertions(+), 33 deletions(-)
 
 diff --git a/examples/talk-llama/CMakeLists.txt b/examples/talk-llama/CMakeLists.txt
-index cac4670..f86a338 100644
+index 549842a..f86a338 100644
 --- a/examples/talk-llama/CMakeLists.txt
 +++ b/examples/talk-llama/CMakeLists.txt
-@@ -2,41 +2,13 @@ if (WHISPER_SDL2)
+@@ -2,42 +2,13 @@ if (WHISPER_SDL2)
      set(CMAKE_CXX_STANDARD 17)
      set(CMAKE_CXX_STANDARD_REQUIRED ON)
  
@@ -36,13 +39,14 @@ index cac4670..f86a338 100644
 -        llama-kv-cache-iswa.cpp
 -        llama-memory-recurrent.cpp
 -        llama-memory-hybrid.cpp
+-        llama-memory-hybrid-iswa.cpp
 -        llama-memory.cpp
 -        llama-mmap.cpp
 -        llama-model-loader.cpp
 -        llama-model-saver.cpp
 -        llama-model.cpp
 -        llama-quant.cpp
--        llama-sampling.cpp
+-        llama-sampler.cpp
 -        llama-vocab.cpp
 -        unicode.cpp
 -        unicode-data.cpp
