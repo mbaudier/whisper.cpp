@@ -1,4 +1,4 @@
-Source: whisper.cpp
+Source: argeo-whisper.cpp
 Section: science
 Priority: optional
 Maintainer: Mathieu Baudier <mbaudier@argeo.org>
@@ -6,15 +6,20 @@ Standards-Version: 4.7.2
 Vcs-Browser: https://git.djapps.eu/?p=pkg/ggml/sources/whisper.cpp;a=summary
 Vcs-Git: https://git.djapps.eu/pkg/ggml/sources/whisper.cpp
 Homepage: https://github.com/ggml-org/whisper.cpp
-Build-Depends: cmake,
-               debhelper-compat (= 13),
+Build-Depends: debhelper-compat (= 13),
+               cmake,
+               clang,
+               lld,
+               llvm,
+               libc++-dev,
                libsdl2-dev,
-               libggml-dev,
-               libllama-dev,
+               argeo-libggml-dev,
+               argeo-libllama-dev,
                pkgconf,
 Rules-Requires-Root: no
 
-Package: libwhisper1
+Package: argeo-libwhisper1
+Conflicts: libwhisper1
 Section: libs
 Architecture: any
 Multi-Arch: same
@@ -24,20 +29,22 @@ Description: Inference of Whisper in pure C/C++ (shared library)
  The shared library provides the core of whisper.cpp
  speech-to-text capabilities using a Whisper model.
 
-Package: whisper.cpp-cli
+Package: argeo-whisper.cpp-cli
+Conflicts: whisper.cpp
 Architecture: any
 Multi-Arch: same
-Depends: libggml0-backend-cpu,
+Depends: argeo-libggml0-backend-cpu,
          ${misc:Depends},
          ${shlibs:Depends}
 Description: Inference of Whisper in pure C/C++ (CLI)
  A versatile tool giving command line access to most
  whisper-cpp capabilities.
 
-Package: whisper.cpp-stream
+Package: argeo-whisper.cpp-stream
+Conflicts: whisper.cpp
 Architecture: any
 Multi-Arch: same
-Depends: libggml0-backend-cpu,
+Depends: argeo-libggml0-backend-cpu,
          ${misc:Depends},
          ${shlibs:Depends}
 Description: Inference of Whisper in pure C/C++ (stream)
@@ -45,10 +52,10 @@ Description: Inference of Whisper in pure C/C++ (stream)
  The SDL sound input (typically a microphone) is
  transcribed as text to the standard output.
 
-Package: whisper.cpp-talk-llama
+Package: argeo-whisper.cpp-talk-llama
 Architecture: any
 Multi-Arch: same
-Depends: libggml0-backend-cpu,
+Depends: argeo-libggml0-backend-cpu,
          ${misc:Depends},
          ${shlibs:Depends}
 Description: Inference of Whisper in pure C/C++ (talk-llama)
@@ -57,12 +64,13 @@ Description: Inference of Whisper in pure C/C++ (talk-llama)
  The SDL input (typically from a microphone) is translated
  into text by whisper.cpp and sent to llama.cpp for processing.
 
-Package: libwhisper-dev
+Package: argeo-libwhisper-dev
+Conflicts: libwhisper-dev
 Section: libdevel
 Architecture: any
 Multi-Arch: same
-Depends: libwhisper1 (= ${binary:Version}),
-         libggml-dev,
+Depends: argeo-libwhisper1 (= ${binary:Version}),
+         argeo-libggml-dev,
          ${misc:Depends}
 Description: Inference of Whisper in pure C/C++ (development files)
  Development files for using whisper.cpp as a shared library

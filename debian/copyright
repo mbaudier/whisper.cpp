@@ -4,7 +4,7 @@ Upstream-Contact: https://github.com/ggerganov/whisper.cpp/issues
 Source: https://github.com/ggerganov/whisper.cpp
 
 Files: *
-Copyright: Copyright (c) 2023-2025 The whisper.cpp authors
+Copyright: Copyright (c) 2023-2026 The whisper.cpp authors
 License: Expat 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@ License: Expat
  SOFTWARE.
 
 Files: debian/*
-Copyright: 2024 Mathieu Baudier <mbaudier@argeo.org>
+Copyright: 2024-2026 Mathieu Baudier <mbaudier@argeo.org>
 License: GPL-2+
  This package is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by

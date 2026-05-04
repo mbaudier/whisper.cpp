@@ -4,6 +4,11 @@
 
 export DEB_BUILD_MAINT_OPTIONS = hardening=-all
 
+# clang build
+export CC = clang
+export CXX = clang++
+export LD = ld.lld
+
 # multiarch
 include /usr/share/dpkg/architecture.mk
 
@@ -27,6 +32,13 @@ CMAKE_FLAGS =  \
                -DWHISPER_SDL2=ON \
 
 FLAGS_ARGEO=-O3 -g -DNDEBUG
+
+# clang build
+CMAKE_FLAGS += -DCMAKE_C_COMPILER=clang \
+               -DCMAKE_CXX_COMPILER=clang++ \
+               -DCMAKE_CXX_FLAGS=-stdlib=libc++ \
+               -DCMAKE_LINKER_TYPE=LLD \
+ 
 
 CMAKE_FLAGS += -DCMAKE_C_FLAGS_RELWITHDEBINFO="$(FLAGS_ARGEO)" \
                -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="$(FLAGS_ARGEO)" \
@@ -54,5 +66,9 @@ override_dh_auto_install:
 	mv $(install_lib)/pkgconfig/*.pc $(install_lib_multiarch)/pkgconfig
 
 override_dh_auto_test:
+	# Ignore tests
 	# tests which depends on remote location are failing
-	dh_auto_test || true
+	#dh_auto_test || true
+
+override_dh_dwz:
+	# Skip dwz optimization when using clang
